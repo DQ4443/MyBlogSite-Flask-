@@ -1,9 +1,10 @@
-import secrets
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
-
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)
+
+app.config['SECRET_KEY'] = 'aecf24c4b1c207b387da5653dd54c59b'
+# app.config
 
 posts = [
     {
