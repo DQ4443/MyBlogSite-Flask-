@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect
 from myblog import app, db, bcrypt # importing from package imports from init file
 from myblog.forms import RegistrationForm, LoginForm
 from myblog.models import User, Post
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 
 posts = [
@@ -67,3 +67,8 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+    
+# account section route
+@app.route("/account")
+def account():
+    return render_template('account.html', title='Account')
