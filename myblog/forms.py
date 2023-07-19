@@ -14,14 +14,14 @@ class RegistrationForm(FlaskForm):
 
         # def validate_field(self, field):
         #     if True:
-        #         raise ValueError('Validatioin Message')
+        #         raise ValueError('Validation Message')
     
-    def validate_username(self.username):
+    def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken, please choose a different one.')
 
-    def validate_email(self.email):
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is taken, please use a different email.')
