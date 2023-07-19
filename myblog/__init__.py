@@ -18,5 +18,9 @@ bcrypt = Bcrypt(app)
 
 # set up login manager to help with user logins
 login_manager = LoginManager(app)
+# set login route
+login_manager.login_view = 'login' # view is the function name of route
+# set login message look
+login_manager.login_message_category = 'info'
 
 from myblog import routes

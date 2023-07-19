@@ -70,5 +70,7 @@ def logout():
     
 # account section route
 @app.route("/account")
+# need to login to access that route
+@login_required
 def account():
     return render_template('account.html', title='Account')
