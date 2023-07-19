@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 # default app to name of Flask process
 app = Flask(__name__)
@@ -14,5 +15,8 @@ db = SQLAlchemy(app)
 
 # set up bcrypt to ensure user password security against data breaches
 bcrypt = Bcrypt(app)
+
+# set up login manager to help with user logins
+login_manager = LoginManager(app)
 
 from myblog import routes
