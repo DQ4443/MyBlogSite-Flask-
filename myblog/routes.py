@@ -75,4 +75,6 @@ def logout():
 # need to login to access that route
 @login_required
 def account():
-    return render_template('account.html', title='Account')
+    # image_file variable from static folder
+    image_file = url_for('static', filename='flask profile pictures/' + current_user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file)
