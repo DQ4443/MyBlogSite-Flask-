@@ -71,7 +71,7 @@ def logout():
     return redirect(url_for('home'))
     
 # account section route
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 # need to login to access that route
 @login_required
 def account():
