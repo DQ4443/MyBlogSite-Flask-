@@ -1,3 +1,5 @@
+import os
+import secrets
 from flask import render_template, url_for, flash, redirect, request
 from myblog import app, db, bcrypt # importing from package imports from init file
 from myblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
@@ -69,7 +71,22 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
-    
+
+#   function for saving pictures
+def save_picture(form_picture):
+    # generates 8 byte hex
+    random_hex = secrets.token_hex(8)
+    # get name and ext of file
+    _, f_ext = os.path.splitext(form_picture.filename)
+    # concatenate
+    picture_fn = random_hex + f_ext
+    # get full path of picture location 
+    picture_path = os.path.join(app.root_path, 'static/flask profile pictures', picture_fn)
+    form_picture.save(picture_path)
+    # returns file name
+    return picture_fn
+
+
 # account section route
 @app.route("/account", methods=['GET', 'POST'])
 # need to login to access that route
@@ -78,6 +95,10 @@ def account():
     form = UpdateAccountForm()
     # if form submit was valid, update corresponding info in db
     if form.validate_on_submit():
+        # picture field is not required
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
