@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from myblog import app, db, bcrypt # importing from package imports from init file
-from myblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from myblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from myblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -118,3 +118,14 @@ def account():
     # image_file variable from static folder
     image_file = url_for('static', filename='flask profile pictures/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+# route for making new posts
+@app.route("/post/new", methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        flash('Your post has been created', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Post', form=form)
+
