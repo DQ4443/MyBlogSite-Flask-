@@ -1,5 +1,6 @@
 from datetime import datetime
-from myblog import db, login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from myblog import db, login_manager, app
 from flask_login import UserMixin # a class that cam be inherited from to add all 4 required user attribute
 
 # user loader function for reloading user information by id
@@ -14,6 +15,24 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    # function for getting reset token
+    def get_reset_token(self, expires_sec=1800):
+        # set unique serializer and expire parameter
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        # return serialized token
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod # tells python to not expect self argument
+    def verify_reset_token(token):
+        # set unique serializer
+        s = Serializer(app.config['SECRET_KEY'])
+        # try to load the token, return user_id if valid, else None
+        try: 
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('{self.username}, {self.email}, {self.image_file}')"
