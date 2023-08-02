@@ -177,11 +177,13 @@ def user_posts(username):
 # method for sending a reset password email to the given user
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
+    msg = Message('Password Reset Request', sender=os.environ.get('EMAIL_USER'), recipients=[user.email])
     msg.body = f'''To Reset your password, visit the following link: {url_for('reset_token', token=token, _external=True)}
     
     If you did not make this request, simply ignore this email and no changes will be made.
     '''
+    # mail.send(msg)
+    # this function does not work as no smtp account is linked with this project
 
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
