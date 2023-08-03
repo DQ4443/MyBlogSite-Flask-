@@ -1,8 +1,8 @@
 import os
 import secrets
 from PIL import Image
-from flask import url_for
-from myblog import app, mail # importing from package imports from init file
+from flask import url_for, current_app
+from myblog import mail # importing from package imports from init file
 from flask_mail import Message
 
 # function for saving pictures
@@ -14,7 +14,7 @@ def save_picture(form_picture):
     # concatenate
     picture_fn = random_hex + f_ext
     # get full path of picture location 
-    picture_path = os.path.join(app.root_path, 'static/flask profile pictures', picture_fn)
+    picture_path = os.path.join(current_app.root_path, 'static/flask profile pictures', picture_fn)
 
     # resize image with Pillow before saving
     output_size = (125, 125)
@@ -33,5 +33,5 @@ def send_reset_email(user):
     
     If you did not make this request, simply ignore this email and no changes will be made.
     '''
-    # mail.send(msg)
+    mail.send(msg)
     # this function does not work as no smtp account is linked with this project
